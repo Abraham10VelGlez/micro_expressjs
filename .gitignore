@@ -1,0 +1,4 @@
+#Environment
+/node_modules
+/postgres
+/server/serverfile/**

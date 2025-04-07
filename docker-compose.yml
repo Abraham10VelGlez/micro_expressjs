@@ -1,0 +1,31 @@
+services:
+  server:
+    container_name: apibackend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - .:/apiavg/serveravg
+      - /apiavg/serveravg/node_modules
+    #command: yarn start
+    command: yarn dev
+    depends_on:
+      - databaseavgapi
+
+  databaseavgapi:
+    image: postgres:9.6
+    #restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "microservicedictav"
+      POSTGRES_PASSWORD: "secret"
+
+    container_name: "dbapi"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+#docker-compose up --build
