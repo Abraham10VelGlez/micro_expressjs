@@ -103,7 +103,26 @@ app.post('/logout', async (req, res) => {
     res.status(200).json({ ok: true, key: 1 });
 })
 
+//validacion de session
+app.post('/tokens', async (req, res) => {
+    if (!token_jsonweb) {
+        // Token no existe o es undefined/null
+        res.clearCookie('jwt_avg');
+        json_response.push({ ok: false, key: 0 });
+        return json_response;
+    }
 
+    try {
+
+        const token_jsonweb = token_?.cookies?.jwt_avg;
+        await jwt.verify(token_jsonweb, process.env.JWT_SECRET_KEY);
+        await res.status(200).json({ ok: true })
+
+    } catch {
+        res.clearCookie('jwt_avg');
+        await res.status(200).json({ ok: false })
+    }
+})
 
 app.listen(port, () => {
     console.log(`EJEMPLO DE APP ESCUCHANDO AL PUERTO de CONEXION ${port}`);
