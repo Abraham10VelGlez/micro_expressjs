@@ -60,7 +60,12 @@ app.get('/jwt', async function (req, res) {
     // usando el json de los datos del (usuario logeado , llave secreta de nuevo archivo env
     const token_ = jwt.sign(tokenuser, process.env.JWT_SECRET_KEY/*, { expiresIn: '5m' } or { expiresIn: '1h' }*/)
     // Comparar la contraseña proporcionada con el hash almacenado    
-    res.cookie("jwt_avg", token_);
+    // res.cookie("jwt_avg", token_);
+    res.cookie("jwt_avg", token_, {
+        httpOnly: true,
+        secure: true,         // porque estarás en HTTPS
+        sameSite: 'None'      // si usas dominios distintos
+    });
     //res.cookie("jsonavg", tokecredenciales);
     res.status(200).json({
         ok: true,
@@ -93,7 +98,12 @@ app.post('/login', async (req, res) => {
     const token_ = jwt.sign(tokenuser, process.env.JWT_SECRET_KEY, { expiresIn: '25m' })
     //const token_ = jwt.sign(tokenuser, process.env.JWT_SECRET_KEY, { expiresIn: '5m' })
     //validacion de json web token  FIN
-    res.cookie("jwt_avg", token_);
+    // res.cookie("jwt_avg", token_);
+    res.cookie("jwt_avg", token_, {
+        httpOnly: true,
+        secure: true,         // porque estarás en HTTPS
+        sameSite: 'None'      // si usas dominios distintos
+    });
 
     res.status(200).json({ ok: true, tokenx: token_ });
 });
@@ -123,7 +133,7 @@ app.get('/tokens', async (req, res) => {
 
 app.post('/tokens2', async (req, res) => {
     const token_jsonweb = req?.cookies?.jwt_avg;
-
+    console.log(token_jsonweb);
     if (!token_jsonweb) {
         res.clearCookie('jwt_avg');
         return res.status(200).json({ ok: false });
@@ -136,8 +146,6 @@ app.post('/tokens2', async (req, res) => {
         return res.status(200).json({ ok: false });
     }
 });
-
-
 
 app.listen(port, () => {
     console.log(`EJEMPLO DE APP ESCUCHANDO AL PUERTO de CONEXION ${port}`);
