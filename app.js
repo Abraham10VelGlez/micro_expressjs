@@ -114,9 +114,9 @@ app.post('/logout', async (req, res) => {
 })
 
 //validacion de session
-app.get('/tokens', async (req, res) => {
+app.post('/tokens', async (req, res) => {    
     const token_jsonweb = req?.cookies?.jwt_avg;
-
+    console.log(token_jsonweb);
     if (!token_jsonweb) {
         res.clearCookie('jwt_avg');
         return res.status(200).json({ ok: false });
