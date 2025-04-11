@@ -104,7 +104,7 @@ app.post('/logout', async (req, res) => {
 })
 
 //validacion de session
-app.post('/tokens', async (req, res) => {
+app.get('/tokens', async (req, res) => {
     if (!token_jsonweb) {
         // Token no existe o es undefined/null
         res.clearCookie('jwt_avg');
