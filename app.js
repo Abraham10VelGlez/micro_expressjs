@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-// rutas de prueba 1
+// validacion de token
 app.get('/jwt', async function (req, res) {
 
     const userrname = "abraham";
@@ -69,7 +69,7 @@ app.get('/jwt', async function (req, res) {
     }); // message client
     //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VycyI6ImFicmFoYW0iLCJwYXNzIjoiYWJyYTEyMjAyNSIsIm5hbWVzeXMiOiJBVkdTdHVkaW9BIiwiaWF0IjoxNzIzMDQ4ODcxfQ.31GiYuKRpehOOIppS09hu7A_PDrbl96jNbb3-Tm3FXY
 });
-// rutas de prueba 2
+// logeo
 app.post('/login', async (req, res) => {
     let { userrname, passwordd } = req.body.values;
     ///validacion interna en base de datos
@@ -97,7 +97,11 @@ app.post('/login', async (req, res) => {
 
     res.status(200).json({ ok: true, tokenx: token_ });
 });
-
+// salir de la apliacaion o cerrar session
+app.post('/logout', async (req, res) => {
+    res.clearCookie('jwt_avg');
+    res.status(200).json({ ok: true, key: 1 });
+})
 
 
 
