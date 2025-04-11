@@ -126,14 +126,14 @@ app.post('/tokens2', async (req, res) => {
 
     if (!token_jsonweb) {
         res.clearCookie('jwt_avg');
-        return res.status(200).json({ ok: false, msg: token_jsonweb });
+        return res.status(200).json({ ok: false });
     }
     try {
         await jwt.verify(token_jsonweb, process.env.JWT_SECRET_KEY);
-        return res.status(200).json({ ok: true, msg: token_jsonweb });
+        return res.status(200).json({ ok: true });
     } catch {
         res.clearCookie('jwt_avg');
-        return res.status(200).json({ ok: false, msg: token_jsonweb });
+        return res.status(200).json({ ok: false });
     }
 });
 
