@@ -121,6 +121,23 @@ app.get('/tokens', async (req, res) => {
 });
 
 
+app.post('/tokens2', async (req, res) => {
+    const token_jsonweb = req?.cookies?.jwt_avg;
+
+    if (!token_jsonweb) {
+        res.clearCookie('jwt_avg');
+        return res.status(200).json({ ok: false });
+    }
+    try {
+        await jwt.verify(token_jsonweb, process.env.JWT_SECRET_KEY);
+        return res.status(200).json({ ok: true });
+    } catch {
+        res.clearCookie('jwt_avg');
+        return res.status(200).json({ ok: false });
+    }
+});
+
+
 
 app.listen(port, () => {
     console.log(`EJEMPLO DE APP ESCUCHANDO AL PUERTO de CONEXION ${port}`);
