@@ -1,7 +1,6 @@
 const express = require('express') // modulo de expressjs
 const helmet = require('helmet'); // modulo de seguridad de  encabezados HTTP relacionados con la seguridad
 const port = 3000 //puerto default puede cambiar
-const apphtml = require('path') //modulo de carga  html paara expres
 const bodyParser = require('body-parser')//uso para peticiones
 const cors = require('cors'); // Importar cors
 const app = express() /// constante de la app
@@ -15,7 +14,7 @@ const cookieParser = require('cookie-parser');
 app.use(helmet());
 
 
-const allowedOrigins = ['http://localhost:5175'];
+const allowedOrigins = ['http://localhost:5173'];
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -71,10 +70,32 @@ app.get('/jwt', async function (req, res) {
     //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VycyI6ImFicmFoYW0iLCJwYXNzIjoiYWJyYTEyMjAyNSIsIm5hbWVzeXMiOiJBVkdTdHVkaW9BIiwiaWF0IjoxNzIzMDQ4ODcxfQ.31GiYuKRpehOOIppS09hu7A_PDrbl96jNbb3-Tm3FXY
 });
 // rutas de prueba 2
-app.post('/login', function (req, res) {
-    console.log("logeox");
-    res.json({ message: "logeox" });
-    //console.log(functionvalidatio_connection_postgres);
+app.post('/login', async (req, res) => {
+    let { userrname, passwordd } = req.body.values;
+    ///validacion interna en base de datos
+    // const result = await fn_flag_validacion_especial(userrname, passwordd);
+    //console.log(result);
+    if (!userrname || !passwordd) {
+        return res.status(200).json({ ok: 0 });
+    }
+    //convertir un char a number
+    const userRole = 1;
+    const nameuser = "Peter Benjamin Parker";
+    //validacion de json web token  INICIO
+    const tokenuser = {
+        key: 340,
+        rol: userRole,
+        users: nameuser,
+        // pass: passwordd,
+        namesys: 'Abram33$5AVGt4sys',
+    }
+    // usando el json de los datos del (usuario logeado , llave secreta de nuevo archivo env
+    const token_ = jwt.sign(tokenuser, process.env.JWT_SECRET_KEY, { expiresIn: '25m' })
+    //const token_ = jwt.sign(tokenuser, process.env.JWT_SECRET_KEY, { expiresIn: '5m' })
+    //validacion de json web token  FIN
+    res.cookie("jwt_avg", token_);
+
+    res.status(200).json({ ok: true, tokenx: token_ });
 });
 
 
