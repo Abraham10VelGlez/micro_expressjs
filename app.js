@@ -114,9 +114,9 @@ app.post('/logout', async (req, res) => {
 })
 
 //validacion de session
-app.post('/tokens', async (req, res) => {    
+app.post('/tokens', async (req, res) => {
     const token_jsonweb = req?.cookies?.jwt_avg;
-    console.log(token_jsonweb);
+    // console.log(token_jsonweb);
     if (!token_jsonweb) {
         res.clearCookie('jwt_avg');
         return res.status(200).json({ ok: false });
@@ -133,7 +133,7 @@ app.post('/tokens', async (req, res) => {
 
 app.post('/tokens2', async (req, res) => {
     const token_jsonweb = req?.cookies?.jwt_avg;
-    console.log(token_jsonweb);
+    // console.log(token_jsonweb);
     if (!token_jsonweb) {
         res.clearCookie('jwt_avg');
         return res.status(200).json({ ok: false });
@@ -146,6 +146,25 @@ app.post('/tokens2', async (req, res) => {
         return res.status(200).json({ ok: false });
     }
 });
+
+
+
+app.post('/tokens3', async (req, res) => {
+    const token_jsonweb = req?.cookies?.jwt_avg;
+    // console.log(token_jsonweb);
+    if (!token_jsonweb) {
+        res.clearCookie('jwt_avg');
+        return res.status(200).json({ ok: false });
+    }
+    try {
+        await jwt.verify(token_jsonweb, process.env.JWT_SECRET_KEY);
+        return res.status(200).json({ ok: true, token: token_jsonweb });
+    } catch {
+        res.clearCookie('jwt_avg');
+        return res.status(200).json({ ok: false });
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`EJEMPLO DE APP ESCUCHANDO AL PUERTO de CONEXION ${port}`);
